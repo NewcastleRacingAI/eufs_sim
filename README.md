@@ -8,11 +8,26 @@
 
 - [docker](https://www.docker.com/)
 
+> [!IMPORTANT]  
+> If you get an error related to permissions when using any `docker` commands, you will need to prefix all them with `sudo`.
+> Read [here](https://docs.docker.com/engine/install/linux-postinstall/#manage-docker-as-a-non-root-user) for more information and instructions on how to avoid it.
+> In short, you will need to run the following commands:
+>
+> ```bash
+> # Create the docker group
+> sudo groupadd docker
+> # Add your user to the docker group
+> sudo usermod -aG docker $USER
+> ```
+>
+> and then log out and log back in so that your group membership is re-evaluated.
+
 ### Steps
 
 To launch the environment, run the following command:
 
 ```bash
+# Host machine
 docker compose up
 ```
 
@@ -47,17 +62,16 @@ You can either do it from the terminal or use [VsCode](https://code.visualstudio
 ### From terminal
 
 ```bash
+# Host machine
 docker exec -it eufs_sim_ros /bin/bash
 ```
-
-> [!NOTE]  
-> The following commands will need to be run from the ROS container
 
 ## Launching the simulator
 
 To launch the simulation, run 
 
 ```bash
+# ROS container
 ros2 launch eufs_launcher eufs_launcher.launch.py
 ```
 
