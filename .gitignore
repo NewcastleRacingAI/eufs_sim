@@ -1,0 +1,7 @@
+# ros workspace
+build/
+install/
+log/
+devel/
+eufs_sim/
+eufs_msg/

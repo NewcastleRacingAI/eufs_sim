@@ -66,6 +66,30 @@ You can either do it from the terminal or use [VsCode](https://code.visualstudio
 docker exec -it eufs_sim_ros /bin/bash
 ```
 
+## Architecture
+
+```bash
+flowchart TD
+    c[Controller]
+    p[Perception]
+    pl[Planner]
+
+    subgraph eufs_sim
+        rs[\Real sensors\]
+        v[Car]
+        ss[/Simulated sensors/]
+    end
+
+    rs -. /car/camera .-> p
+    p -. /cones .-> pl
+    pl -- /path --> c
+    c -- /cmd --> v
+
+    ss -- /cones --> pl
+
+    v -- UPDATE --> ss
+```
+
 ## Launching the simulator
 
 To launch the simulation, run 
@@ -79,3 +103,15 @@ You should see a small window appear in the browser.
 Make it bigger, deselect `RViz` and select `Gazebo UI`, then `Launch!`.
 Two new windows should appear: the simulator, **Gazebo**, and a manual controller you can use to move the car in the simulation.  
 Click on `Manual drive` and test the controls!
+
+## Useful commands
+
+```bash
+# Build all packages in the workspace
+colcon build
+# Build a specific package
+colcon build --packages-select <package_name>
+# Source the current workspace
+source install/setup.bash
+```
+

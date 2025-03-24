@@ -33,5 +33,7 @@ RUN echo 'export EUFS_MASTER=/workspace' >> ~/.bashrc && \
     echo 'source /opt/ros/galactic/setup.bash' >> ~/.bashrc && \ 
     echo 'source /workspace/install/setup.bash' >> ~/.bashrc
 
-# To finalise, `rosdep install --from-paths $EUFS_MASTER --ignore-src -r -y && colcon build`, 
-# `. ./install/setup.bash` and then `ros2 launch eufs_launcher eufs_launcher.launch.py`
+COPY newcastle_racing_ai newcastle_racing_ai
+
+# Build our package with colcon
+RUN . /opt/ros/galactic/setup.sh && colcon build --packages-select newcastle_racing_ai
