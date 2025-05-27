@@ -35,6 +35,7 @@ RUN echo 'export EUFS_MASTER=/workspace' >> ~/.bashrc && \
 
 # THIS PART WILL BE UNCOMMENTED WHEN WE HAVE FINALIZED THE PACKAGE
 # COPY newcastle_racing_ai newcastle_racing_ai
+# COPY newcastle_racing_ai_msgs newcastle_racing_ai_msgs
 
 # Build our package with colcon
 # RUN . /opt/ros/galactic/setup.sh && colcon build --packages-select newcastle_racing_ai

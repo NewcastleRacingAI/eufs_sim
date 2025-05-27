@@ -112,7 +112,7 @@ To launch the simulation, run
 
 ```bash
 # ROS container
-. /opt/ros/galactic/setup.sh && colcon build --packages-select newcastle_racing_ai && ros2 launch newcastle_racing_ai nra_launch.py
+. /opt/ros/galactic/setup.sh && colcon build --packages-select newcastle_racing_ai newcastle_racing_ai_msgs && . install/local_setup.sh && ros2 launch newcastle_racing_ai nra_launch.py
 ```
 
 You should see a small window appear in the browser.
