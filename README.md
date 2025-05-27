@@ -82,6 +82,8 @@ flowchart TD
     end
 
     rs -. /camera .-> p
+    rs -. /imu .-> p
+    rs -. /lidar .-> p
     p -. /cones .-> pl
     pl -- /path --> c
     c -- /cmd --> v
@@ -101,12 +103,14 @@ The ROS nodes, the rectangles in the diagram above, mimic the team division of t
 
 ### Topics
 
-- `/camera` of type ??: camera feed from the car. Sent by the Sensors to the **Perception** node (NOT CURRENTLY IMPLEMENTED IN THE GAZEBO SIMULATOR)
+- `/camera` of type [Image](https://docs.ros.org/en/noetic/api/sensor_msgs/html/msg/Image.html): camera feed from the car. Sent by the Sensors to the **Perception** node
+- `/imu` of type [Imu](https://docs.ros.org/en/noetic/api/sensor_msgs/html/msg/Imu.html): position information. Sent by the Sensors to the **Perception** node
+- `/lidar` of type [PointCloud2](https://docs.ros.org/en/noetic/api/sensor_msgs/html/msg/PointCloud2.html): lidar points. Sent by the Sensors to the **Perception** node
 - `/cones` of type [ConeArrayWithCovariance](https://gitlab.com/eufs/eufs_msgs/-/blob/master/msg/ConeArrayWithCovariance.msg): cones detected by the **Perception** node. Sent to the **Planner** node
 - `/path` of type [PoseArray](https://docs.ros.org/en/noetic/api/geometry_msgs/html/msg/PoseArray.html): list of waypoints calculated by the **Planner** node. Sent to the **Controller** node
 - `/cmd` of type [AckermannDriveStamped](https://docs.ros.org/en/noetic/api/ackermann_msgs/html/msg/AckermannDriveStamped.html): command to move the car. Sent from the **Controller** node to the underlying car motor
 
-## Launching the simulator
+## Launching the ROS nodes (and Gazebo)
 
 To launch the simulation, run
 
@@ -120,10 +124,31 @@ Make it bigger, deselect `RViz` and select `Gazebo UI`, then `Launch!`.
 Two new windows should appear: the simulator, **Gazebo**, and a manual controller you can use to move the car in the simulation.  
 Click on `Manual drive` and test the controls!
 
+## Launching the simulator
+
+For the simulator we plan to use our fork of the [Formula Student Driverless Simulator](https://github.com/TendTo/Formula-Student-Driverless-Simulatorr).  
+
+### Installing the simulator
+
+Go to the [release page](https://github.com/FS-Driverless/Formula-Student-Driverless-Simulator/releases) and dowload the latest release for your machine.
+Unzip it and run either the `FSDS.exe` on Windows or `FSDS.sh` on Linux.
+
+### Installing the library
+
+Clone our fork and install the `fsds` library locally.
+If you are using a virtual environment the procedure may be slightly different.
+
+```bash
+git clone https://github.com/TendTo/Formula-Student-Driverless-Simulator.git
+cd Formula-Student-Driverless-Simulator
+pip3 install .
+```
+
 ### Real sensors
 
 > [!WARNING]  
-> NOT CURRENTLY IMPLEMENTED IN THE GAZEBO SIMULATOR
+> NOT CURRENTLY IMPLEMENTED IN THE GAZEBO SIMULATOR.
+> Tey will be implemented in AirSim instead.
 
 ### Simulated sensors
 
