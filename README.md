@@ -9,7 +9,7 @@
 - [docker](https://www.docker.com/)
 
 > [!IMPORTANT]  
-> If you get an error related to permissions when using any `docker` commands, you will need to prefix all them with `sudo`.
+> If you get an error related to permissions when using any `docker` commands, you will need to prefix all of them with `sudo`.
 > Read [here](https://docs.docker.com/engine/install/linux-postinstall/#manage-docker-as-a-non-root-user) for more information and instructions on how to avoid it.
 > In short, you will need to run the following commands:
 >
@@ -60,7 +60,7 @@ b[[localhost:8080]] --> v
 While the containers are running, you can attach a shell to the ROS container `eufs_sim_ros`.
 You can either do it from the terminal or use [VsCode](https://code.visualstudio.com/) with the [Dev containers](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers) plugin installed or similar IDEs.
 
-### From terminal
+### From the terminal
 
 ```bash
 # Host machine
@@ -147,8 +147,8 @@ pip3 install .
 ### Real sensors
 
 > [!WARNING]  
-> NOT CURRENTLY IMPLEMENTED IN THE GAZEBO SIMULATOR.
-> Tey will be implemented in AirSim instead.
+> Not implemented in the Gazebo Simulator.
+> They will be implemented in AirSim instead.
 
 ### Simulated sensors
 
