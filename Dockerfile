@@ -3,18 +3,7 @@ FROM osrf/ros:galactic-desktop
 
 # Install dependencies from apt
 RUN apt update && \ 
-    apt install -y wget python3-rosdep ros-galactic-gazebo-ros-pkgs ros-galactic-ackermann-msgs ros-galactic-joint-state-publisher ros-galactic-xacro ros-galactic-rosbridge-server
-
-WORKDIR /deps
-
-# Install yaml-cpp from source
-RUN git clone https://github.com/jbeder/yaml-cpp.git && \
-    cd yaml-cpp && \
-    mkdir build && \
-    cd build && \
-    cmake -DYAML_BUILD_SHARED_LIBS=ON .. && \
-    make && \
-    make install
+    apt install -y wget python3-rosdep ros-galactic-gazebo-ros-pkgs ros-galactic-ackermann-msgs ros-galactic-joint-state-publisher ros-galactic-xacro ros-galactic-rosbridge-server libyaml-cpp-dev
 
 WORKDIR /workspace
 
