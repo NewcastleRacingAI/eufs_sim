@@ -6,6 +6,17 @@ from ackermann_msgs.msg import AckermannDriveStamped, AckermannDrive
 from .parameters import PARAMETERS
 
 class Controller(Node):
+    """A value that means `do nothing`"""
+
+    __null_ads = AckermannDriveStamped(
+        drive=AckermannDrive(
+            steering_angle=0.0,
+            steering_angle_velocity=0.0,
+            speed=0.0,
+            acceleration=0.0,
+            jerk=0.0,
+        )
+    )
 
     def __init__(self):
         super().__init__('Controller')
@@ -14,8 +25,23 @@ class Controller(Node):
         self._publisher = self.create_publisher(AckermannDriveStamped, self.get_parameter("cmd_topic").value, 10)
         # self.timer = self.create_timer(timer_period, self._timer_callback)
 
+        self._steering_angle = 0.0
+        self._steering_angle_velocity = 0.0
+        self._speed = 0.0
+        self._acceleration = 0.0
+        self._jerk = 0.0
+
+        self.ads = self.__null_ads
+
+    def _update_ads(self):
+        # TODO: Do the actual math, update self.ads accordingly,
+        # `_timer_callback()` will take care of publishing.`.
+        pass
+
     def _on_path(self, msg):
         self.get_logger().info('Received: "%s"' % type(msg))
+        self._update_ads()
+        self.get_logger().debug('Updated ADS: "%s"' % self.ads)
 
     def _timer_callback(self):
         msg = AckermannDriveStamped(drive=AckermannDrive(steering_angle=0.0, steering_angle_velocity=0.0, speed=0.0, acceleration=0.0, jerk=0.0))
