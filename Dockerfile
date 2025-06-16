@@ -3,7 +3,15 @@ FROM osrf/ros:galactic-desktop
 
 # Install dependencies from apt
 RUN apt update && \ 
-    apt install -y wget python3-rosdep ros-galactic-gazebo-ros-pkgs ros-galactic-ackermann-msgs ros-galactic-joint-state-publisher ros-galactic-xacro ros-galactic-rosbridge-server libyaml-cpp-dev
+    apt install -y \
+        libyaml-cpp-dev \
+        python3-rosdep \
+        ros-galactic-gazebo-ros-pkgs \
+        ros-galactic-ackermann-msgs \
+        ros-galactic-joint-state-publisher \
+        ros-galactic-xacro \
+        ros-galactic-rosbridge-server \
+        wget 
 
 WORKDIR /workspace
 
