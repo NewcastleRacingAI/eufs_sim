@@ -8,8 +8,8 @@ RUN apt update && \
 WORKDIR /workspace
 
 # Install dependencies from rosdep
-RUN git clone https://gitlab.com/eufs/eufs_sim.git && \
-    git clone https://gitlab.com/eufs/eufs_msgs.git && \
+RUN git clone --depth 1 https://gitlab.com/eufs/eufs_sim.git && \
+    git clone --depth 1 https://gitlab.com/eufs/eufs_msgs.git && \
     export EUFS_MASTER=/workspace && \
     rosdep update && \
     rosdep install --from-paths $EUFS_MASTER --ignore-src -r -y
