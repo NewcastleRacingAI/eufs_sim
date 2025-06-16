@@ -12,22 +12,21 @@ RUN apt update && \
         ros-galactic-xacro \
         ros-galactic-rosbridge-server \
         wget 
+ENV EUFS_MASTER=/workspace
 
-WORKDIR /workspace
+WORKDIR ${EUFS_MASTER}
 
 # Install dependencies from rosdep
 RUN git clone --depth 1 https://gitlab.com/eufs/eufs_sim.git && \
     git clone --depth 1 https://gitlab.com/eufs/eufs_msgs.git && \
-    export EUFS_MASTER=/workspace && \
     rosdep update && \
-    rosdep install --from-paths $EUFS_MASTER --ignore-src -r -y
+    rosdep install --from-paths ${EUFS_MASTER} --ignore-src -r -y
 
 # Build with colcon
 RUN . /opt/ros/galactic/setup.sh && colcon build
 
 # Setup .bashrc
-RUN echo 'export EUFS_MASTER=/workspace' >> ~/.bashrc && \
-    echo 'source /opt/ros/galactic/setup.bash' >> ~/.bashrc && \ 
+RUN echo 'source /opt/ros/galactic/setup.bash' >> ~/.bashrc && \ 
     echo 'source /workspace/install/setup.bash' >> ~/.bashrc
 
 # THIS PART WILL BE UNCOMMENTED WHEN WE HAVE FINALIZED THE PACKAGE
