@@ -12,6 +12,7 @@ RUN apt update && \
         ros-galactic-xacro \
         ros-galactic-rosbridge-server \
         wget 
+
 ENV EUFS_MASTER=/workspace
 
 WORKDIR ${EUFS_MASTER}

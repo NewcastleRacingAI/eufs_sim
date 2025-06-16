@@ -30,6 +30,8 @@ services:
       - ./newcastle_racing_ai_msgs:/workspace/newcastle_racing_ai_msgs
     environment:
       - DISPLAY=novnc:0.0
+    depends_on:
+      - novnc
     networks:
       - x11
     ports:
