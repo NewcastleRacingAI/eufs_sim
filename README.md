@@ -156,7 +156,7 @@ in the simulation.  Click on `Manual drive` and test the controls!
 ## Launching the simulator
 
 For the simulator we plan to use our fork of the [Formula Student Driverless
-Simulator](https://github.com/TendTo/Formula-Student-Driverless-Simulatorr).  
+Simulator](https://github.com/TendTo/Formula-Student-Driverless-Simulator).  
 
 ### Installing the simulator
 
