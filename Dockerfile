@@ -4,14 +4,14 @@ FROM osrf/ros:galactic-desktop
 # Install dependencies from apt
 RUN apt update && \ 
     apt install -y \
-        libyaml-cpp-dev \
-        python3-rosdep \
-        ros-galactic-gazebo-ros-pkgs \
-        ros-galactic-ackermann-msgs \
-        ros-galactic-joint-state-publisher \
-        ros-galactic-xacro \
-        ros-galactic-rosbridge-server \
-        wget 
+    libyaml-cpp-dev \
+    python3-rosdep \
+    ros-galactic-gazebo-ros-pkgs \
+    ros-galactic-ackermann-msgs \
+    ros-galactic-joint-state-publisher \
+    ros-galactic-xacro \
+    ros-galactic-rosbridge-server \
+    wget 
 
 ENV EUFS_MASTER=/workspace
 
@@ -31,8 +31,10 @@ RUN echo 'source /opt/ros/galactic/setup.bash' >> ~/.bashrc && \
     echo 'source /workspace/install/setup.bash' >> ~/.bashrc
 
 # THIS PART WILL BE UNCOMMENTED WHEN WE HAVE FINALIZED THE PACKAGE
-# COPY newcastle_racing_ai newcastle_racing_ai
-# COPY newcastle_racing_ai_msgs newcastle_racing_ai_msgs
+COPY newcastle_racing_ai newcastle_racing_ai
+COPY newcastle_racing_ai_msgs newcastle_racing_ai_msgs
 
 # Build our package with colcon
-# RUN . /opt/ros/galactic/setup.sh && colcon build --packages-select newcastle_racing_ai
+RUN . /opt/ros/galactic/setup.sh && colcon build --packages-select newcastle_racing_ai
+
+ENTRYPOINT ["/bin/bash", "newcastle_racing_ai/entrypoint.sh"]
