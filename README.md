@@ -112,11 +112,16 @@ docker exec -it newcastle-racing-ai /bin/bash
 
 ## Architecture
 
+This is the in progress architecture
 ```mermaid
 flowchart TD
-    c[Controller]
-    p[Perception]
-    pl[Planner]
+    c[Controller_in_progress]
+    p[Perception_in_progress]
+    pl1[FT_FSD_in_progress]
+    pl2[MPCC_in_progress]
+    can[CAN_BUS_API_in_progress]
+    miss[Mission_Control_in_progress]
+    ebs[EBS_in_progress]
 
     subgraph FSDS
         ss[\Simulated sensors\]
@@ -126,11 +131,15 @@ flowchart TD
     ss -. /nra/camera .-> p
     ss -. /nra/imu .-> p
     ss -. /nra/lidar .-> p
-    p -. /nra/cones .-> pl
-    pl -- /nra/path --> c
+    p -. /nra/cones .-> pl1
+    pl1 -- /nra/path --> pl2
+    pl2 -- /nra/path_optimised --> c
     c -- /nra/cmd --> v
+    c --> can
 
     v -- UPDATE --> ss
+    miss --/mission_control --> c
+    ebs -- /ebs --> c
 ```
 
 ### Nodes

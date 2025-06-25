@@ -6,6 +6,11 @@ services:
     volumes:
       - ./newcastle_racing_ai:/workspace/newcastle_racing_ai
       - ./newcastle_racing_ai_msgs:/workspace/newcastle_racing_ai_msgs
+      - ./ft-fsd-path-planning:/workspace/ft-fsd-path-planning
+      - ./MPCC:/workspace/MPCC
+      - /tmp/.X11-unix:/tmp/.X11-unix
+    environment:
+      - DISPLAY=${DISPLAY} 
     ports:
       - "9090:9090"
     stdin_open: true

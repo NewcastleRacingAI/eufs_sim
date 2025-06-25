@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>mpcc_control</name>
+  <version>0.1.0</version>
+  <description>MPCC controller ROS 2 package</description>
+  <maintainer email="your.email@domain.com">Your Name</maintainer>
+  <license>BSD</license>
+
+  <!-- 依赖包，根据需要修改 -->
+  <buildtool_depend>ament_cmake</buildtool_depend>
+  <depend>rclcpp</depend>
+  <depend>std_msgs</depend>
+  <depend>geometry_msgs</depend>
+  <depend>sensor_msgs</depend>
+  <depend>eufs_msgs</depend>
+
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
+</package>

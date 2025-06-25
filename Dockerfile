@@ -6,22 +6,26 @@ RUN apt update && \
     apt install -y \
     libyaml-cpp-dev \
     python3-rosdep \
+    x11-apps \
+    ros-galactic-rviz2 \
+    ros-galactic-rqt \
+    ros-galactic-xacro \
     ros-galactic-gazebo-ros-pkgs \
     ros-galactic-ackermann-msgs \
     ros-galactic-joint-state-publisher \
     ros-galactic-xacro \
     ros-galactic-rosbridge-server \
+    ros-galactic-image-geometry \
+    ros-galactic-joint-state-publisher \
+    python3-colcon-common-extensions \
+    python3-pip \
+    nano \
+    python3-rosdep \
     wget 
 
-ENV EUFS_MASTER=/workspace
+ENV NUFAI_MASTER=/workspace
 
-WORKDIR ${EUFS_MASTER}
-
-# Install dependencies from rosdep
-RUN git clone --depth 1 https://gitlab.com/eufs/eufs_sim.git && \
-    git clone --depth 1 https://gitlab.com/eufs/eufs_msgs.git && \
-    rosdep update && \
-    rosdep install --from-paths ${EUFS_MASTER} --ignore-src -r -y
+WORKDIR ${NUFAI_MASTER}
 
 # Build with colcon
 RUN . /opt/ros/galactic/setup.sh && colcon build
@@ -31,10 +35,10 @@ RUN echo 'source /opt/ros/galactic/setup.bash' >> ~/.bashrc && \
     echo 'source /workspace/install/setup.bash' >> ~/.bashrc
 
 # THIS PART WILL BE UNCOMMENTED WHEN WE HAVE FINALIZED THE PACKAGE
-COPY newcastle_racing_ai newcastle_racing_ai
-COPY newcastle_racing_ai_msgs newcastle_racing_ai_msgs
+#COPY newcastle_racing_ai newcastle_racing_ai
+#COPY newcastle_racing_ai_msgs newcastle_racing_ai_msgs
 
 # Build our package with colcon
-RUN . /opt/ros/galactic/setup.sh && colcon build --packages-select newcastle_racing_ai
+#RUN . /opt/ros/galactic/setup.sh && colcon build --packages-select newcastle_racing_ai
 
 ENTRYPOINT ["/bin/bash", "newcastle_racing_ai/entrypoint.sh"]
