@@ -23,7 +23,6 @@ def generate_launch_description():
             "time_step": LaunchConfiguration("time_step"),
         }
     ]
-    launch_eufs = LaunchConfiguration("launch_eufs")
     launch_bridge = LaunchConfiguration("launch_bridge")
 
     return LaunchDescription(
@@ -35,14 +34,7 @@ def generate_launch_description():
             DeclareLaunchArgument("path_topic", default_value=TextSubstitution(text="path")),
             DeclareLaunchArgument("cmd_topic", default_value=TextSubstitution(text="cmd")),
             DeclareLaunchArgument("time_step", default_value=TextSubstitution(text="0.0")),
-            DeclareLaunchArgument("launch_eufs", default_value="False"),
             DeclareLaunchArgument("launch_bridge", default_value="True"),
-            IncludeLaunchDescription(
-                PythonLaunchDescriptionSource(
-                    os.path.join(get_package_share_directory("eufs_launcher"), "eufs_launcher.launch.py")
-                ),
-                condition=IfCondition(launch_eufs),
-            ),
             IncludeLaunchDescription(
                 FrontendLaunchDescriptionSource(
                     os.path.join(
@@ -51,26 +43,26 @@ def generate_launch_description():
                 ),
                 condition=IfCondition(launch_bridge),
             ),
-            Node(
-                package=PACKAGE_NAME,
-                namespace=NAMESPACE,
-                executable="controller",
-                name="controller",
-                parameters=node_parameters,
-            ),
-            Node(
-                package=PACKAGE_NAME,
-                namespace=NAMESPACE,
-                executable="perception",
-                name="perception",
-                parameters=node_parameters,
-            ),
-            Node(
-                package=PACKAGE_NAME,
-                namespace=NAMESPACE,
-                executable="planner",
-                name="planner",
-                parameters=node_parameters,
-            ),
+            # Node(
+            #     package=PACKAGE_NAME,
+            #     namespace=NAMESPACE,
+            #     executable="controller",
+            #     name="controller",
+            #     parameters=node_parameters,
+            # ),
+            # Node(
+            #     package=PACKAGE_NAME,
+            #     namespace=NAMESPACE,
+            #     executable="perception",
+            #     name="perception",
+            #     parameters=node_parameters,
+            # ),
+            # Node(
+            #     package=PACKAGE_NAME,
+            #     namespace=NAMESPACE,
+            #     executable="planner",
+            #     name="planner",
+            #     parameters=node_parameters,
+            # ),
         ]
     )

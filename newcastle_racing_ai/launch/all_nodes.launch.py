@@ -14,17 +14,17 @@ def generate_launch_description():
             output='screen'
         ),
 
-        # MPCC control node (as a ROS 2 node)
-        Node(
-            package='mpcc_control',
-            executable='mpcc_control_node',
-            output='screen'
-        ),
+        # # MPCC control node (as a ROS 2 node)
+        # Node(
+        #     package='mpcc_control',
+        #     executable='mpcc_control_node',
+        #     output='screen'
+        # ),
 
         # Newcastle Racing AI launch file
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource(
-                os.path.join(workspace_dir, 'src/newcastle_racing_ai/launch/nra_launch.py')
+                os.path.join(workspace_dir, 'newcastle_racing_ai/launch/nra_launch.py')
             )
         ),
     ])

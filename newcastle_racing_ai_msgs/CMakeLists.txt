@@ -19,6 +19,7 @@ set(msg_files
   msg/Cone.msg
   msg/ExtraInfo.msg
   msg/WheelStates.msg
+  msg/PathWithBoundaries.msg
 )
 
 set(srv_files

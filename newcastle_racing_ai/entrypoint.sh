@@ -1,9 +1,11 @@
 #!/bin/bash
 source /opt/ros/galactic/setup.bash
 
-cd workspace/MPCC/C++
-rm -rf External/
-./install.sh
+# cd workspace/MPCC/C++
+# rm -rf External/
+# ./install.sh
+
+# build path planning node
 cd /workspace/ft-fsd-path-planning
 pip install --no-cache-dir -r requirements.txt
 
@@ -13,8 +15,9 @@ pip3 install --no-cache-dir pandas matplotlib scipy
 rosdep install --from-paths src --ignore-src -r -y
 
 # colcon build --packages-select newcastle_racing_ai newcastle_racing_ai_msgs
-colcon build --symlink-install
+# colcon build --symlink-install
+colcon build --symlink-install --packages-skip mpcc_control
 source install/setup.bash
 
 # launch the nodes
-RUN /workspace/launch/all_nodes.launch.py
+ros2 launch newcastle_racing_ai all_nodes.launch.py

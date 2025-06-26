@@ -1,7 +1,8 @@
 import rclpy
 from rclpy.node import Node
 import numpy as np
-from newcastle_racing_ai_msgs.msg import cone, CarState,PathWithBoundaries
+from newcastle_racing_ai_msgs.msg import PathWithBoundaries, Track
+from nav_msgs.msg  import Odometry
 from matplotlib import pyplot as plt
 from sensor_msgs.msg import Imu
 from fsd_path_planning import PathPlanner, MissionTypes
@@ -28,9 +29,10 @@ class PathPlanningDualCamVisualizationNode(Node):
         self.max_speed = 0.5
 
         # 初始化发布器与定时器
-        self.create_subscription(CarState, '/odometry_integration/car_state', self.car_state_callback, 10)
-        self.create_subscription(ConeArrayWithCovariance, '/ground_truth/cones', self.cones_callback, 10)
-        self.create_subscription(Imu, '/camera/imu/data', self.imu_callback, 10)
+        #still need to 
+        self.create_subscription(Odometry, '/fsds/testing_only/odom', self.car_state_callback, 10)
+        self.create_subscription(Track, '/fsds/testing_only/track', self.cones_callback, 10)
+        self.create_subscription(Imu, '/nrfai/imu', self.imu_callback, 10)
         self.control_publisher = self.create_publisher(AckermannDriveStamped, '/cmd', 10)
         self.path_publisher = self.create_publisher(PathWithBoundaries, '/path', 10)
         self.marker_pub = self.create_publisher(Marker, '/visualization_marker', 1)
@@ -46,7 +48,7 @@ class PathPlanningDualCamVisualizationNode(Node):
 
     def publish_path(self):
         """发布路径的可视化数据"""
-        if not isinstance(self.path, tuple) or len(self.path[0]) == 0:
+        if not isinstance(self.path, tuple) or len(self.path) == 0 or len(self.path[0]) == 0:
             return
 
         path = self.path[0]
@@ -79,11 +81,21 @@ class PathPlanningDualCamVisualizationNode(Node):
         cone_coords = {'UNKNOWN': [], 'RIGHT': [], 'LEFT': [], 'START_FINISH_AREA': [], 'START_FINISH_LINE': []}
         cone_types = {'unknown_color_cones': 'UNKNOWN', 'yellow_cones': 'RIGHT', 'blue_cones': 'LEFT', 'orange_cones': 'START_FINISH_AREA', 'big_orange_cones': 'START_FINISH_LINE'}
 
-        for cone_type, enum_type in cone_types.items():
-            for cone in getattr(msg, cone_type, []):
-                relative_position = [cone.point.x + self.car_position[0], cone.point.y + self.car_position[1]]
-                cone_coords[enum_type].append(relative_position)
+        for cone in msg:
+            if cone.color == 0:
+                enum_type = cone_type['blue_cones']
+            elif cone.color == 1:
+                enum_type = cone_type['yellow_cones']
+            elif cone.color == 2:
+                enum_type = cone_type['big_orange_cones']
+            elif cone.color == 3:
+                enum_type = cone_type['orange_cones']
+            else:
+                enum_type = cone_type['unknown_color_cones']
 
+            relative_position = [cone.point.x + self.car_position[0], cone.point.y + self.car_position[1]]
+            cone_coords[enum_type].append(relative_position)
+                
         self.global_cones = [np.array(cone_coords['UNKNOWN']), np.array(cone_coords['RIGHT']), np.array(cone_coords['LEFT']), np.array(cone_coords['START_FINISH_AREA']), np.array(cone_coords['START_FINISH_LINE'])]
         self.check_and_compute_path()
 
@@ -114,6 +126,7 @@ class PathPlanningDualCamVisualizationNode(Node):
         path_msg.right_to_left_match = [int(val) for val in right_to_left_match if isinstance(val, int) and -2147483648 <= val <= 2147483647]
 
         self.path_publisher.publish(path_msg)
+
     def update_plot(self):
         try:
             if not isinstance(self.path, tuple) or len(self.path[0]) == 0:

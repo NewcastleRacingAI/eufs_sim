@@ -19,6 +19,7 @@ RUN apt update && \
     ros-galactic-joint-state-publisher \
     python3-colcon-common-extensions \
     python3-pip \
+    python3-tk \
     nano \
     python3-rosdep \
     wget 

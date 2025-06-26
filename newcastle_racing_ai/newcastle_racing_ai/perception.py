@@ -4,7 +4,7 @@ from rclpy.node import Node
 
 from sensor_msgs.msg import Image, Imu, PointCloud2
 from geometry_msgs.msg import Point
-from eufs_msgs.msg import ConeArrayWithCovariance, ConeWithCovariance
+from newcastle_racing_ai_msgs.msg import ConeArrayWithCovariance, ConeWithCovariance
 from .parameters import PARAMETERS
 
 

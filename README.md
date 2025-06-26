@@ -122,6 +122,8 @@ flowchart TD
     can[CAN_BUS_API_in_progress]
     miss[Mission_Control_in_progress]
     ebs[EBS_in_progress]
+    cam[Camera_in_progress]
+    imu[IMU_in_progress]
 
     subgraph FSDS
         ss[\Simulated sensors\]
@@ -131,6 +133,8 @@ flowchart TD
     ss -. /nra/camera .-> p
     ss -. /nra/imu .-> p
     ss -. /nra/lidar .-> p
+    Camera -- /nra/camera --> p
+    IMU -- /nra/imu --> p  
     p -. /nra/cones .-> pl1
     pl1 -- /nra/path --> pl2
     pl2 -- /nra/path_optimised --> c
