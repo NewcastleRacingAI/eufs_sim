@@ -22,7 +22,9 @@ RUN apt update && \
     python3-tk \
     nano \
     python3-rosdep \
-    wget 
+    wget \
+    can-utils
+
 
 ENV NUFAI_MASTER=/workspace
 

@@ -21,6 +21,7 @@ def generate_launch_description():
             "path_topic": LaunchConfiguration("path_topic"),
             "cmd_topic": LaunchConfiguration("cmd_topic"),
             "time_step": LaunchConfiguration("time_step"),
+            "ebs_topic": LaunchConfiguration("ebs_topic"),
         }
     ]
     launch_bridge = LaunchConfiguration("launch_bridge")
@@ -34,6 +35,7 @@ def generate_launch_description():
             DeclareLaunchArgument("path_topic", default_value=TextSubstitution(text="path")),
             DeclareLaunchArgument("cmd_topic", default_value=TextSubstitution(text="cmd")),
             DeclareLaunchArgument("time_step", default_value=TextSubstitution(text="0.0")),
+            DeclareLaunchArgument("ebs_topic", default_value=TextSubstitution(text="0.0")),
             DeclareLaunchArgument("launch_bridge", default_value="True"),
             IncludeLaunchDescription(
                 FrontendLaunchDescriptionSource(
@@ -43,13 +45,13 @@ def generate_launch_description():
                 ),
                 condition=IfCondition(launch_bridge),
             ),
-            # Node(
-            #     package=PACKAGE_NAME,
-            #     namespace=NAMESPACE,
-            #     executable="controller",
-            #     name="controller",
-            #     parameters=node_parameters,
-            # ),
+            Node(
+                package=PACKAGE_NAME,
+                namespace=NAMESPACE,
+                executable="controller",
+                name="controller",
+                parameters=node_parameters,
+            )
             # Node(
             #     package=PACKAGE_NAME,
             #     namespace=NAMESPACE,

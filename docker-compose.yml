@@ -8,6 +8,7 @@ services:
       - ./newcastle_racing_ai_msgs:/workspace/newcastle_racing_ai_msgs
       - ./ft-fsd-path-planning:/workspace/ft-fsd-path-planning
       - ./MPCC:/workspace/MPCC
+      - ./ros_can:/workspace/ros_can
       - /tmp/.X11-unix:/tmp/.X11-unix
     environment:
       - DISPLAY=${DISPLAY} 

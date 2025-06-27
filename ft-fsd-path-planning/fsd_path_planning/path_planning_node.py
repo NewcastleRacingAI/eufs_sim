@@ -2,6 +2,7 @@ import rclpy
 from rclpy.node import Node
 import numpy as np
 from newcastle_racing_ai_msgs.msg import PathWithBoundaries, Track
+from newcastle_racing_ai.utils.transformations import quaternion_to_euler
 from nav_msgs.msg  import Odometry
 from matplotlib import pyplot as plt
 from sensor_msgs.msg import Imu
@@ -29,7 +30,6 @@ class PathPlanningDualCamVisualizationNode(Node):
         self.max_speed = 0.5
 
         # 初始化发布器与定时器
-        #still need to 
         self.create_subscription(Odometry, '/fsds/testing_only/odom', self.car_state_callback, 10)
         self.create_subscription(Track, '/fsds/testing_only/track', self.cones_callback, 10)
         self.create_subscription(Imu, '/nrfai/imu', self.imu_callback, 10)
@@ -154,19 +154,6 @@ class PathPlanningDualCamVisualizationNode(Node):
 
         except Exception as e:
             print(f"Error updating plot: {e}")
-
-def quaternion_to_euler(quaternion):
-    x, y, z, w = quaternion.x, quaternion.y, quaternion.z, quaternion.w
-    t0 = 2.0 * (w * x + y * z)
-    t1 = 1.0 - 2.0 * (x * x + y * y)
-    roll = atan2(t0, t1)
-    t2 = 2.0 * (w * y - z * x)
-    t2 = max(-1.0, min(1.0, t2))
-    pitch = np.arcsin(t2)
-    t3 = 2.0 * (w * z + x * y)
-    t4 = 1.0 - 2.0 * (y * y + z * z)
-    yaw = atan2(t3, t4)
-    return roll, pitch, yaw
 
 def main(args=None):
     rclpy.init(args=args)

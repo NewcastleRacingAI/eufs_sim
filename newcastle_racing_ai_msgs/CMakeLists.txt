@@ -20,6 +20,7 @@ set(msg_files
   msg/ExtraInfo.msg
   msg/WheelStates.msg
   msg/PathWithBoundaries.msg
+  msg/EBS.msg
 )
 
 set(srv_files

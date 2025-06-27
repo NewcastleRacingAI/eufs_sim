@@ -27,4 +27,10 @@ def generate_launch_description():
                 os.path.join(workspace_dir, 'newcastle_racing_ai/launch/nra_launch.py')
             )
         ),
+        #launch ros_can
+        IncludeLaunchDescription(
+            PythonLaunchDescriptionSource(
+                os.path.join(workspace_dir, 'ros_can/launch/ros_can.launch.py')
+            )
+        )
     ])

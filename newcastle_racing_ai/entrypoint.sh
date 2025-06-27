@@ -12,7 +12,16 @@ pip install --no-cache-dir -r requirements.txt
 cd /workspace
 source /opt/ros/galactic/setup.bash
 pip3 install --no-cache-dir pandas matplotlib scipy
-rosdep install --from-paths src --ignore-src -r -y
+rosdep install --from-paths . --ignore-src -r -y --skip-keys="mpcc_control"
+
+#build ROS_CAN_API 
+cd /workspace/ros_can/eufs_msgs
+make
+cd /workspace/ros_can/FS-AI_API/FS-AI_API
+make
+cd /workspace/ros_can/FS-AI_API
+./setup.sh
+
 
 # colcon build --packages-select newcastle_racing_ai newcastle_racing_ai_msgs
 # colcon build --symlink-install
