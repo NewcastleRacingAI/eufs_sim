@@ -120,18 +120,30 @@ flowchart TD
 
     subgraph FSDS
         ss[\Simulated sensors\]
+        gt[\Ground Truth\]:::gt
         v[[Car]]
     end
 
     ss -. /nra/camera .-> p
+    ss -. /nra/depth .-> p
     ss -. /nra/imu .-> p
     ss -. /nra/lidar .-> p
+    gt -. /nra/odom .-> p
+    gt -. /nra/track .-> p
     p -. /nra/cones .-> pl
     pl -- /nra/path --> c
     c -- /nra/cmd --> v
 
     v -- UPDATE --> ss
+
+classDef gt stroke-dasharray: 5px, 5px;
 ```
+
+> [!NOTE]  
+> The _Simulated sensor_ will eventually be replaced by real sensors on the car.
+
+> [!NOTE]  
+> The _Ground Truth_ is used for testing, but it will not be available on the real car.
 
 ### Nodes
 
@@ -145,26 +157,17 @@ the Newcastle Racing AI team:
 
 ### Topics
 
-- `/nra/camera` of type
-  [Image](https://docs.ros.org/en/noetic/api/sensor_msgs/html/msg/Image.html):
-  camera feed from the car. Sent by the Sensors to the **Perception** node.
-- `/nra/imu` of type
-  [Imu](https://docs.ros.org/en/noetic/api/sensor_msgs/html/msg/Imu.html):
-  position information. Sent by the Sensors to the **Perception** node.
-- `/nra/lidar` of type
-  [PointCloud2](https://docs.ros.org/en/noetic/api/sensor_msgs/html/msg/PointCloud2.html):
-  lidar points. Sent by the Sensors to the **Perception** node.
-- `/nra/cones` of type
-  [ConeArrayWithCovariance](https://gitlab.com/eufs/eufs_msgs/-/blob/master/msg/ConeArrayWithCovariance.msg):
-  cones detected by the **Perception** node. Sent to the **Planner** node. **(TBD)**
-- `/nra/path` of type
-  [PoseArray](https://docs.ros.org/en/noetic/api/geometry_msgs/html/msg/PoseArray.html):
-  list of waypoints calculated by the **Planner** node. Sent to the
-  **Controller** node. **(TBD)**
-- `/nra/cmd` of type
-  [AckermannDriveStamped](https://docs.ros.org/en/noetic/api/ackermann_msgs/html/msg/AckermannDriveStamped.html):
-  command to move the car. Sent from the **Controller** node to the underlying
-  car motor. **(TBD)**
+| Topic Name    | Type                                                                                                           | From           | To             | Description                                                   |
+| ------------- | -------------------------------------------------------------------------------------------------------------- | -------------- | -------------- | ------------------------------------------------------------- |
+| `/nra/camera` | [Image](https://docs.ros.org/en/noetic/api/sensor_msgs/html/msg/Image.html)                                    | _Sensors_      | **Perception** | Camera feed from the car (optional)                           |
+| `/nra/depth`  | [Image](https://docs.ros.org/en/noetic/api/sensor_msgs/html/msg/Image.html)                                    | _Sensors_      | **Perception** | Depth image from the camera feed                              |
+| `/nra/imu`    | [Imu](https://docs.ros.org/en/noetic/api/sensor_msgs/html/msg/Imu.html)                                        | _Sensors_      | **Perception** | IMU data (orientation, angular velocity, linear acceleration) |
+| `/nra/lidar`  | [PointCloud2](https://docs.ros.org/en/noetic/api/sensor_msgs/html/msg/PointCloud2.html)                        | _Sensors_      | **Perception** | Lidar points                                                  |
+| `/nra/odom`   | [Odometry](https://docs.ros.org/en/noetic/api/nav_msgs/html/msg/Odometry.html)                                 | _Ground Truth_ | **Perception** | Odometry information                                          |
+| `/nra/track`  | [Track](https://docs.ros.org/en/noetic/api/eufs_msgs/html/msg/Track.html)                                      | _Ground Truth_ | **Perception** | Track information                                             |
+| `/nra/cones`  | [ConeArrayWithCovariance](https://gitlab.com/eufs/eufs_msgs/-/blob/master/msg/ConeArrayWithCovariance.msg)     | **Perception** | **Planner**    | Cones as detected by the **Perception** node                  |
+| `/nra/path`   | [PoseArray](https://docs.ros.org/en/noetic/api/geometry_msgs/html/msg/PoseArray.html)                          | **Planner**    | **Controller** | List of waypoints calculated by the **Planner** node          |
+| `/nra/cmd`    | [AckermannDriveStamped](https://docs.ros.org/en/noetic/api/ackermann_msgs/html/msg/AckermannDriveStamped.html) | **Controller** | _Car_          | Command to move the car                                       |
 
 ## Restarting the ROS nodes
 
