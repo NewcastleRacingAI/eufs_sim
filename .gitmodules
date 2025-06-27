@@ -1,0 +1,3 @@
+[submodule "Formula-Student-Driverless-Simulator"]
+	path = Formula-Student-Driverless-Simulator
+	url = https://github.com/TendTo/Formula-Student-Driverless-Simulator.git

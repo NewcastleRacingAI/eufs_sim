@@ -12,7 +12,7 @@ services:
     tty: true
   fsds:
     image: fsds-ros
-    build: ./FSDS
+    build: ./Formula-Student-Driverless-Simulator
     container_name: fsds-ros
     extra_hosts:
       - "host.docker.internal:host-gateway"
