@@ -19,7 +19,11 @@ def generate_launch_description():
             "lidar_topic": LaunchConfiguration("lidar_topic"),
             "cones_topic": LaunchConfiguration("cones_topic"),
             "path_topic": LaunchConfiguration("path_topic"),
-            "cmd_topic": LaunchConfiguration("cmd_topic"),
+            "depth_topic": LaunchConfiguration("depth_topic"),
+            "control_topic": LaunchConfiguration("control_topic"),
+            "odom_topic": LaunchConfiguration("odom_topic"),
+            "track_topic": LaunchConfiguration("track_topic"),
+            "reset_topic": LaunchConfiguration("reset_topic"),
             "time_step": LaunchConfiguration("time_step"),
         }
     ]
@@ -33,8 +37,12 @@ def generate_launch_description():
             DeclareLaunchArgument("lidar_topic", default_value=TextSubstitution(text="lidar")),
             DeclareLaunchArgument("cones_topic", default_value=TextSubstitution(text="cones")),
             DeclareLaunchArgument("path_topic", default_value=TextSubstitution(text="path")),
-            DeclareLaunchArgument("cmd_topic", default_value=TextSubstitution(text="cmd")),
-            DeclareLaunchArgument("time_step", default_value=TextSubstitution(text="0.0")),
+            DeclareLaunchArgument("depth_topic", default_value=TextSubstitution(text="depth")),
+            DeclareLaunchArgument("control_topic", default_value=TextSubstitution(text="control")),
+            DeclareLaunchArgument("odom_topic", default_value=TextSubstitution(text="odom")),
+            DeclareLaunchArgument("track_topic", default_value=TextSubstitution(text="track")),
+            DeclareLaunchArgument("reset_topic", default_value=TextSubstitution(text="reset")),
+            DeclareLaunchArgument("time_step", default_value=TextSubstitution(text="5.0")),
             DeclareLaunchArgument("launch_eufs", default_value="False"),
             DeclareLaunchArgument("launch_bridge", default_value="True"),
             IncludeLaunchDescription(

@@ -20,10 +20,20 @@ services:
       - newcastle_racing_ai
     command:
       - "--fsds-ip"
-      - "host.docker.internal"
+      - "host.docker.internal" # This refers to the host running the Docker container
       - "--ros-ip"
-      - "newcastle_racing_ai"
+      - "newcastle_racing_ai" # This refers to the service name in the docker-compose file
       - "--timestep"
       - "5"
+      - "--sensors" # Add or remove sensors as needed
+      - "camera"
+      - "depth"
+      - "lidar"
+      - "imu"
+      - "odom"
+      - "track"
+      - "--receivers" # Add or remove receivers as needed
+      - "reset"
+      # - "control" # WARNING: You can only control the car from ROS or with the Keyboard, not both at the same time
     stdin_open: true
     tty: true

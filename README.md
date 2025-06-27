@@ -124,15 +124,16 @@ flowchart TD
         v[[Car]]
     end
 
-    ss -. /nra/camera .-> p
-    ss -. /nra/depth .-> p
-    ss -. /nra/imu .-> p
-    ss -. /nra/lidar .-> p
-    gt -. /nra/odom .-> p
-    gt -. /nra/track .-> p
-    p -. /nra/cones .-> pl
-    pl -- /nra/path --> c
-    c -- /nra/cmd --> v
+    ss -- /nrfai/camera --> p
+    ss -- /nrfai/depth --> p
+    ss -- /nrfai/imu --> p
+    ss -- /nrfai/lidar --> p
+    gt -. /nrfai/odom .-> p
+    gt -. /nrfai/track .-> p
+    p -. /nrfai/cones .-> pl
+    pl -- /nrfai/path --> c
+    c -- /nrfai/control --> v
+    c -. /nrfai/reset .-> v
 
     v -- UPDATE --> ss
 
@@ -157,17 +158,26 @@ the Newcastle Racing AI team:
 
 ### Topics
 
-| Topic Name    | Type                                                                                                           | From           | To             | Description                                                   |
-| ------------- | -------------------------------------------------------------------------------------------------------------- | -------------- | -------------- | ------------------------------------------------------------- |
-| `/nra/camera` | [Image](https://docs.ros.org/en/noetic/api/sensor_msgs/html/msg/Image.html)                                    | _Sensors_      | **Perception** | Camera feed from the car (optional)                           |
-| `/nra/depth`  | [Image](https://docs.ros.org/en/noetic/api/sensor_msgs/html/msg/Image.html)                                    | _Sensors_      | **Perception** | Depth image from the camera feed                              |
-| `/nra/imu`    | [Imu](https://docs.ros.org/en/noetic/api/sensor_msgs/html/msg/Imu.html)                                        | _Sensors_      | **Perception** | IMU data (orientation, angular velocity, linear acceleration) |
-| `/nra/lidar`  | [PointCloud2](https://docs.ros.org/en/noetic/api/sensor_msgs/html/msg/PointCloud2.html)                        | _Sensors_      | **Perception** | Lidar points                                                  |
-| `/nra/odom`   | [Odometry](https://docs.ros.org/en/noetic/api/nav_msgs/html/msg/Odometry.html)                                 | _Ground Truth_ | **Perception** | Odometry information                                          |
-| `/nra/track`  | [Track](https://docs.ros.org/en/noetic/api/eufs_msgs/html/msg/Track.html)                                      | _Ground Truth_ | **Perception** | Track information                                             |
-| `/nra/cones`  | [ConeArrayWithCovariance](https://gitlab.com/eufs/eufs_msgs/-/blob/master/msg/ConeArrayWithCovariance.msg)     | **Perception** | **Planner**    | Cones as detected by the **Perception** node                  |
-| `/nra/path`   | [PoseArray](https://docs.ros.org/en/noetic/api/geometry_msgs/html/msg/PoseArray.html)                          | **Planner**    | **Controller** | List of waypoints calculated by the **Planner** node          |
-| `/nra/cmd`    | [AckermannDriveStamped](https://docs.ros.org/en/noetic/api/ackermann_msgs/html/msg/AckermannDriveStamped.html) | **Controller** | _Car_          | Command to move the car                                       |
+| Topic Name       | Type                                                                                                       | From           | To             | Description                                                    |
+| ---------------- | ---------------------------------------------------------------------------------------------------------- | -------------- | -------------- | -------------------------------------------------------------- |
+| `/nrfai/camera`  | [Image](https://docs.ros.org/en/noetic/api/sensor_msgs/html/msg/Image.html)                                | _Sensors_      | **Perception** | Camera feed from the car (optional)                            |
+| `/nrfai/depth`   | [Image](https://docs.ros.org/en/noetic/api/sensor_msgs/html/msg/Image.html)                                | _Sensors_      | **Perception** | Depth image from the camera feed                               |
+| `/nrfai/imu`     | [Imu](https://docs.ros.org/en/noetic/api/sensor_msgs/html/msg/Imu.html)                                    | _Sensors_      | **Perception** | IMU data (orientation, angular velocity, linear acceleration)  |
+| `/nrfai/lidar`   | [PointCloud2](https://docs.ros.org/en/noetic/api/sensor_msgs/html/msg/PointCloud2.html)                    | _Sensors_      | **Perception** | Lidar points                                                   |
+| `/nrfai/odom`    | [Odometry](https://docs.ros.org/en/noetic/api/nav_msgs/html/msg/Odometry.html)                             | _Ground Truth_ | **Perception** | Odometry information                                           |
+| `/nrfai/track`   | [Track](./newcastle_racing_ai_msgs/msg/Track.msg)                                                          | _Ground Truth_ | **Perception** | Track information                                              |
+| `/nrfai/cones`   | [ConeArrayWithCovariance](https://gitlab.com/eufs/eufs_msgs/-/blob/master/msg/ConeArrayWithCovariance.msg) | **Perception** | **Planner**    | Cones as detected by the **Perception** **(TBD)**              |
+| `/nrfai/path`    | [PoseArray](https://docs.ros.org/en/noetic/api/geometry_msgs/html/msg/PoseArray.html)                      | **Planner**    | **Controller** | List of waypoints calculated by the **Planner** node **(TBD)** |
+| `/nrfai/control` | [ControlCommand](./newcastle_racing_ai_msgs/msg/ControlCommand.msg)                                        | **Controller** | _Car_          | Command to move the car                                        |
+| `/nrfai/reset`   | [Bool](https://docs.ros.org/en/noetic/api/std_msgs/html/msg/Bool.html)                                     | **Controller** | _Car_          | Reset the simulation                                           |
+
+> [!NOTE]  
+> The depth topic returns an image with the depth information of each pixel.
+> More precisely, the distance is capped to 40m and the values are normalized to the range [0, 255].
+> The returned image is in the `mono8` format, where each pixel represents the depth in meters.
+
+> [!NOTE]  
+> The position of the cones in the `/nrfai/track` topic is relative to the car's initial position.
 
 ## Restarting the ROS nodes
 
@@ -179,18 +189,18 @@ The manual process is shown in [entrypoint.sh](./newcastle_racing_ai/entrypoint.
 ### Simulated sensors
 
 When the simulation is running, the simulated sensors will send the cone
-information using the `/nra/camera`, `nra/imu` and `nra/lidar` topics.
+information using the `/nrfai/camera`, `nra/imu` and `nra/lidar` topics.
 
 You can check the information being sent by using the `ros2 topic echo`
 command, for example:
 
 ```bash
 # Check the camera feed
-ros2 topic echo /nra/camera
+ros2 topic echo /nrfai/camera
 # Check the IMU data
-ros2 topic echo /nra/imu
+ros2 topic echo /nrfai/imu
 # Check the lidar points
-ros2 topic echo /nra/lidar
+ros2 topic echo /nrfai/lidar
 ```
 
 Furthermore, for debugging purposes, the **Perception** node will also store the images it receives in the `newcastle_racing_ai/imgs` folder.
@@ -215,11 +225,10 @@ ros2 topic info <topic_name>
 # Send a message to a topic
 ros2 topic pub <topic_name> <message_type> <message>
 # e.g.
-# ros2 topic pub /cmd_ackermann \
-#   ackermann_msgs/msg/AckermannDriveStamped \
-#   "{ steering_angle: 0.0,
-#      steering_angle_velocity: 0.0,
-#      speed: 0.0,
-#      acceleration: 0.0,
-#      jerk: 0.0}"
+# ros2 topic pub /nrfai/control \
+#   newcastle_racing_ai_msgs/ControlCommand \
+#   '{ throttle: 1, brake: 0, steering: -1 }'
+#
+# ros2 topic pub /nrfai/reset \
+#   std_msgs/Bool '{ data: true }'
 ```

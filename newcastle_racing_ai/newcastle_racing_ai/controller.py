@@ -2,23 +2,38 @@ import rclpy
 from rclpy.node import Node
 
 from geometry_msgs.msg import PoseArray
-from ackermann_msgs.msg import AckermannDriveStamped, AckermannDrive
+from newcastle_racing_ai_msgs.msg import ControlCommand
 from .parameters import PARAMETERS
+
 
 class Controller(Node):
 
     def __init__(self):
-        super().__init__('Controller')
+        super().__init__("Controller")
         self.declare_parameters(namespace="", parameters=PARAMETERS)
-        self._subscription = self.create_subscription(PoseArray, self.get_parameter("path_topic").value, self._on_path, 10)
-        self._publisher = self.create_publisher(AckermannDriveStamped, self.get_parameter("cmd_topic").value, 10)
-        # self.timer = self.create_timer(timer_period, self._timer_callback)
+        #####################
+        # Subscribers
+        #####################
+        self._subscription = self.create_subscription(
+            PoseArray, self.get_parameter("path_topic").value, self._on_path, 10
+        )
+        #####################
+        # Publishers
+        #####################
+        self._publisher = self.create_publisher(ControlCommand, self.get_parameter("control_topic").value, 10)
+        #####################
+        # Timer
+        #####################
+        self.timer = self.create_timer(self.get_parameter("time_step").value, self._timer_callback)
 
     def _on_path(self, msg):
         self.get_logger().info('Received: "%s"' % type(msg))
 
     def _timer_callback(self):
-        msg = AckermannDriveStamped(drive=AckermannDrive(steering_angle=0.0, steering_angle_velocity=0.0, speed=0.0, acceleration=0.0, jerk=0.0))
+        msg = ControlCommand()
+        msg.throttle = 0.0  # Example throttle value. Between (0.0, 1.0)
+        msg.steering = 0.0  # Example steering value. Between (-1.0, 1.0)
+        msg.brake = 0.0  # Example brake value. Between (0.0, 1.0)
         self._publisher.publish(msg)
         self.get_logger().info('Publishing: "%s"' % msg)
 
@@ -31,5 +46,5 @@ def main(args=None):
     rclpy.shutdown()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
