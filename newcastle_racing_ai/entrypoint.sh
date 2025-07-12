@@ -7,4 +7,4 @@ source /opt/ros/galactic/setup.bash
 # colcon build --packages-select newcastle_racing_ai newcastle_racing_ai_msgs
 
 source /workspace/install/setup.bash
-ros2 launch newcastle_racing_ai nra_launch.py
+ros2 launch newcastle_racing_ai nra_launch.py "$@"

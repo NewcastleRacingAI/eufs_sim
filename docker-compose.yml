@@ -6,10 +6,22 @@ services:
     volumes:
       - ./newcastle_racing_ai:/workspace/newcastle_racing_ai
       - ./newcastle_racing_ai_msgs:/workspace/newcastle_racing_ai_msgs
+      - zed-settings:/usr/local/zed/settings
+      - zed-resources:/usr/local/zed/resources
     ports:
       - "9090:9090"
     stdin_open: true
     tty: true
+    privileged: true # Enable USB support. Only needed for mods==real to use the ZED camera
+    deploy: 
+      resources:
+        reservations:
+          devices: # Enable GPU support. Only needed for mods==real to use the ZED camera
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+    command:
+      - mode:=real # [sim, real] - Determines wheter to launch the ros bridge (for the simulation) or the ZED node
   fsds:
     image: fsds-ros
     build: ./Formula-Student-Driverless-Simulator
@@ -37,3 +49,7 @@ services:
       # - "control" # WARNING: You can only control the car from ROS or with the Keyboard, not both at the same time
     stdin_open: true
     tty: true
+
+volumes:
+  zed-settings:
+  zed-resources:
