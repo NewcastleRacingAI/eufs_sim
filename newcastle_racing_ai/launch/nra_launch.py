@@ -1,11 +1,14 @@
 import os
 from launch import LaunchDescription
 from launch_ros.actions import Node
+from launch_ros.substitutions import FindPackageShare
 from launch.actions import IncludeLaunchDescription, DeclareLaunchArgument
-from launch.launch_description_sources import PythonLaunchDescriptionSource, FrontendLaunchDescriptionSource
-from ament_index_python import get_package_share_directory
-from launch.substitutions import LaunchConfiguration, TextSubstitution
+from launch.launch_description_sources import FrontendLaunchDescriptionSource
+from launch.substitutions import LaunchConfiguration, TextSubstitution, EqualsSubstitution, PathJoinSubstitution
 from launch.conditions import IfCondition
+from ament_index_python import get_package_share_directory
+
+
 
 PACKAGE_NAME = "newcastle_racing_ai"
 NAMESPACE = "nrfai"
@@ -27,8 +30,7 @@ def generate_launch_description():
             "time_step": LaunchConfiguration("time_step"),
         }
     ]
-    launch_eufs = LaunchConfiguration("launch_eufs")
-    launch_bridge = LaunchConfiguration("launch_bridge")
+    mode = LaunchConfiguration("mode")
 
     return LaunchDescription(
         [
@@ -43,22 +45,31 @@ def generate_launch_description():
             DeclareLaunchArgument("track_topic", default_value=TextSubstitution(text="track")),
             DeclareLaunchArgument("reset_topic", default_value=TextSubstitution(text="reset")),
             DeclareLaunchArgument("time_step", default_value=TextSubstitution(text="5.0")),
-            DeclareLaunchArgument("launch_eufs", default_value="False"),
-            DeclareLaunchArgument("launch_bridge", default_value="True"),
-            IncludeLaunchDescription(
-                PythonLaunchDescriptionSource(
-                    os.path.join(get_package_share_directory("eufs_launcher"), "eufs_launcher.launch.py")
-                ),
-                condition=IfCondition(launch_eufs),
-            ),
+            DeclareLaunchArgument("mode", default_value="sim", choices=["sim", "real"]),
+
+            # Ros bridge used to collect sensor data from the AIRsim simulator
             IncludeLaunchDescription(
                 FrontendLaunchDescriptionSource(
                     os.path.join(
                         get_package_share_directory("rosbridge_server"), "launch", "rosbridge_websocket_launch.xml"
                     )
                 ),
-                condition=IfCondition(launch_bridge),
+                launch_arguments={
+                    "default_call_service_timeout": "5.0",
+                    "call_services_in_new_thread": "True",
+                    "send_action_goals_in_new_thread": "True",
+                }.items(),
+                condition=IfCondition(EqualsSubstitution(mode, "sim")), # Enabled if mode==sim
             ),
+            # ZED camera wrapper used to collect data from the real camera. It must be connected via USB
+            IncludeLaunchDescription(
+                PathJoinSubstitution([FindPackageShare("zed_wrapper"), "launch", "zed_camera.launch.py"]),
+                launch_arguments={
+                    'camera_model': 'zed',
+                }.items(),
+                condition=IfCondition(EqualsSubstitution(mode, "real")), # Enabled if mode==real
+            ),
+
             Node(
                 package=PACKAGE_NAME,
                 namespace=NAMESPACE,
