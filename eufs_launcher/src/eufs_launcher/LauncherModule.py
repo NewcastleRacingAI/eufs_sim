@@ -153,7 +153,7 @@ class EUFSLauncher(Plugin):
         counter = 0
         for key, value in checkboxes.items():
             cur_xpos = starting_xpos + 100 * (counter % 2)
-            cur_ypos = starting_ypos + 15 * (counter // 2)
+            cur_ypos = starting_ypos + 15 * int(counter // 2)
             cur_cbox = QCheckBox(checkboxes[key]["label"], self._widget)
             cur_cbox.setChecked(checkboxes[key]["checked_on_default"])
             cur_cbox.setGeometry(cur_xpos, cur_ypos, 300, 30)
@@ -219,10 +219,10 @@ class EUFSLauncher(Plugin):
                 else:
                     new_width = geom.width() * scalar_multiplier + 200
                 widget.setGeometry(
-                    geom.x() * scalar_multiplier,
-                    geom.y() * scalar_multiplier,
-                    new_width,
-                    geom.height() * (scalar_multiplier),
+                    int(geom.x() * scalar_multiplier),
+                    int(geom.y() * scalar_multiplier),
+                    int(new_width),
+                    int(geom.height() * (scalar_multiplier)),
                 )
 
         # If use_gui is false, we jump straight into launching the track

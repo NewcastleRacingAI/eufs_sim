@@ -24,6 +24,7 @@
 
 // Main Include
 #include "gazebo_race_car_model/gazebo_ros_race_car.hpp"
+#include <tf2_geometry_msgs/tf2_geometry_msgs.hpp>
 
 // STD Include
 #include <algorithm>
