@@ -15,6 +15,7 @@
   <url type="bugtracker">https://gitlab.com/eufs/eufs_sim/issues</url>
 
   <depend>rclpy</depend>
+  <depend>rqt</depend>
   <depend>rqt_gui</depend>
 
   <depend>launch</depend>

@@ -16,6 +16,7 @@
 
   <depend>ament_index_python</depend>
   <depend>xacro</depend>
+  <depend>rqt</depend>
   <depend>rqt_gui</depend>
 
   <depend>launch</depend>
