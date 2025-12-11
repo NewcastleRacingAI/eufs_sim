@@ -351,19 +351,19 @@ class EUFSRobotSteeringGUI(Plugin):
 
     def _on_max_linear_changed(self, value):
         self._widget.linear_slider.setMaximum(
-            value * EUFSRobotSteeringGUI.slider_factor)
+            int(value * EUFSRobotSteeringGUI.slider_factor))
 
     def _on_min_linear_changed(self, value):
         self._widget.linear_slider.setMinimum(
-            value * EUFSRobotSteeringGUI.slider_factor)
+            int(value * EUFSRobotSteeringGUI.slider_factor))
 
     def _on_max_angular_changed(self, value):
         self._widget.angular_slider.setMaximum(
-            value * EUFSRobotSteeringGUI.slider_factor)
+            int(value * EUFSRobotSteeringGUI.slider_factor))
 
     def _on_min_angular_changed(self, value):
         self._widget.angular_slider.setMinimum(
-            value * EUFSRobotSteeringGUI.slider_factor)
+            int(value * EUFSRobotSteeringGUI.slider_factor))
 
     def _on_strong_increase_linear_pressed(self):
         self._widget.linear_slider.setValue(
